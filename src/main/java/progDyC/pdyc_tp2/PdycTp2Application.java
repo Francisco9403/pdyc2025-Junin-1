@@ -1,13 +1,13 @@
-package edu.unnoba.tp2;
+package progDyC.pdyc_tp2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Tp2Application {
+public class PdycTp2Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Tp2Application.class, args);
+		SpringApplication.run(PdycTp2Application.class, args);
 	}
 
 }
