@@ -1,10 +1,10 @@
-package edu.unnoba.tp2;
+package progDyC.pdyc_tp2;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Tp2ApplicationTests {
+class PdycTp2ApplicationTests {
 
 	@Test
 	void contextLoads() {
