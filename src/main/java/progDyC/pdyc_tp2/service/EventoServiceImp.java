@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.stereotype.Service;
 import progDyC.pdyc_tp2.model.Evento;
 import progDyC.pdyc_tp2.repository.EventoRepository;
 
+@Service
 public class EventoServiceImp implements EventoService{
 
     @Autowired

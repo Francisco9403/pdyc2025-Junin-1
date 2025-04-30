@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.stereotype.Service;
 import progDyC.pdyc_tp2.model.Artista;
 import progDyC.pdyc_tp2.repository.ArtistaRepository;
 
-public class ArtistaServiceImp implements ArtistaService{
+@Service
+public class ArtistaServiceImp implements ArtistaService {
 
     @Autowired
     private ArtistaRepository repository;
