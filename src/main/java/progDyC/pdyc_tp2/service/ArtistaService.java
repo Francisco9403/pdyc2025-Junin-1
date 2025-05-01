@@ -3,12 +3,12 @@ package progDyC.pdyc_tp2.service;
 import java.util.List;
 
 import progDyC.pdyc_tp2.model.Artista;
+import progDyC.pdyc_tp2.model.Genero;
 
 public interface ArtistaService {
-    public List<Artista> getAll();
-    public void create(Artista artista);
-    public void update(Long id,Artista artista);
-    public Artista getInstance(Long id);
-    public void delete(Long id);
-
+    List<Artista> getAll(Genero genre);
+    Artista getById(Long id);
+    Artista create(Artista artista);
+    Artista update(Long id, Artista artista);
+    void deleteOrDeactivate(Long id);
 }

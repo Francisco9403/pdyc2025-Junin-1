@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import progDyC.pdyc_tp2.model.Artista;
+import progDyC.pdyc_tp2.model.Genero;
 import progDyC.pdyc_tp2.repository.ArtistaRepository;
 
 @Service
@@ -15,27 +18,44 @@ public class ArtistaServiceImp implements ArtistaService {
     private ArtistaRepository repository;
 
     @Override
-    public List<Artista> getAll(){
+    public List<Artista> getAll(Genero genero) {
+        if (genero != null) {
+            return repository.findByGenero(genero);
+        }
         return repository.findAll();
     }
+
     @Override
-    public void create(Artista artista){
-        repository.save(artista);
-    } 
-    @Override
-    public void update(Long id, Artista artista){
-        Artista artistaBD =repository.findById(id).get();
-        artistaBD.setNombre(artista.getNombre());
-        repository.save(artistaBD);
-    }
-    @Override
-    public Artista getInstance(Long id){
-        return repository.findById(id).get();
-    }
-    @Override
-    public void delete(Long id){
-        Artista artista = repository.findById(id).get();
-        repository.delete(artista);
+    public Artista getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Override
+    public Artista create(Artista artista) {
+        artista.setActive(true);
+        return repository.save(artista);
+    }
+
+    @Override
+    public Artista update(Long id, Artista artista) {
+        Artista existing = getById(id);
+        if (!existing.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Artista desactivado no editable");
+        }
+        existing.setNombre(artista.getNombre());
+        existing.setGenre(artista.getGenre());
+        return repository.save(existing);
+    }
+
+    @Override
+    public void deleteOrDeactivate(Long id) {
+        Artista existing = getById(id);
+        if (existing.getEvents().isEmpty()) {
+            repository.delete(existing);
+        } else {
+            existing.setActive(false);
+            repository.save(existing);
+        }
+    }
 }
