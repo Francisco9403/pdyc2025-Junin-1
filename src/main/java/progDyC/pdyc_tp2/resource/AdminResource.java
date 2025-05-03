@@ -17,8 +17,8 @@ import progDyC.pdyc_tp2.service.AdminService;
 
 @RestController
 @RequestMapping("/admins")
-public class AdminResource {
-    
+public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUDES http Y SE RETORNAN LOS HTML
+                                    //  LUEGO SE LE SOLICITA AL service QUE HACER
     @Autowired
     private AdminService service;
 

@@ -15,22 +15,26 @@ public class Evento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
     private LocalDate startDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EventoState state = EventoState.TENTATIVE;
 
-    @ManyToMany
-    @JoinTable(
-            name = "event_artists",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    @ManyToMany                                       //Relacion n-n, Lo siguiente solo se hace desde el lado dueño de la relacion
+    @JoinTable(                                       //Crea una nueva tabla intermedia entre Eventos y Artista
+            name = "event_artists",                   //Nombre de la tabla
+            joinColumns = @JoinColumn(name = "event_id"),       //Estas dos son las columnas que unen ambas entidades
+            inverseJoinColumns = @JoinColumn(name = "artist_id") 
     )
-    private Set<Artista> artists = new HashSet<>();
+    private Set<Artista> artists = new HashSet<>();   //Estructura de datos que evita duplicados automaticamente, tambien posee una busque mas rapida (internamente usa tabla hash)
 
     public Long getId() {
         return id;

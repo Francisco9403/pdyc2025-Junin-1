@@ -5,10 +5,10 @@ import java.util.List;
 import progDyC.pdyc_tp2.model.Admin;
 
 public interface AdminService {
-    public List<Admin> getAll();
-    public void create(Admin admin);
-    public void update(Long id,Admin admin);
-    public Admin getInstance(Long id);
-    public void delete(Long id);
+    List<Admin> getAll();
+    void create(Admin admin);
+    void update(Long id,Admin admin);
+    Admin getInstance(Long id);
+    void delete(Long id);
 
 }

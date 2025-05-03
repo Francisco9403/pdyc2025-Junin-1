@@ -13,12 +13,14 @@ public class Artista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "genero")
+    @Column(nullable = false)
     private Genero genero;
 
+    @Column(nullable = false)
     private boolean active = true;
 
     @ManyToMany(mappedBy = "artists")
@@ -31,23 +33,20 @@ public class Artista {
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public Genero getGenre() {
+    public Genero getGenero() {
         return genero;
     }
-
-    public void setGenre(Genero genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
     public boolean isActive() {
         return active;
     }
-
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -55,7 +54,6 @@ public class Artista {
     public Set<Evento> getEvents() {
         return events;
     }
-
     public void setEvents(Set<Evento> events) {
         this.events = events;
     }

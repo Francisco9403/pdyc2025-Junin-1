@@ -25,7 +25,9 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public List<Evento> getAll(EventoState state) {
-        if (state != null) return eventoRepo.findByState(state);
+        if (state != null) {
+            return eventoRepo.findByState(state);
+        }
         return eventoRepo.findAll();
     }
 
@@ -37,14 +39,14 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento create(Evento evento) {
-        evento.setState(EventoState.TENTATIVE);
-        evento.getArtists().clear();
-        return eventoRepo.save(evento);
+        evento.setState(EventoState.TENTATIVE); //Ver si son necesarias estas dos lineas porque se supone
+        evento.getArtists().clear();            //Que cuando se crea el evento, ya contiene el estado y el 
+        return eventoRepo.save(evento);         //Artista que queremos
     }
 
     @Override
     public Evento update(Long id, Evento evento) {
-        Evento e = getById(id);
+        Evento e = eventoRepo.findById(id).get();
         if (e.getState() != EventoState.TENTATIVE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Solo eventos tentativos pueden editarse");
         }
@@ -56,7 +58,7 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public void delete(Long id) {
-        Evento e = getById(id);
+        Evento e = eventoRepo.findById(id).get();
         if (e.getState() != EventoState.TENTATIVE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Solo eventos tentativos pueden borrarse");
         }
@@ -65,11 +67,11 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento addArtist(Long eventId, Long artistId) {
-        Evento e = getById(eventId);
+        Evento e = eventoRepo.findById(eventId).get();
         if (e.getState() != EventoState.TENTATIVE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        Artista a = artistaRepo.findById(artistId)
+        Artista a = artistaRepo.findById(artistId)          //Ver si no necesita un .get() al final
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (!a.isActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Artista inactivo");
@@ -80,7 +82,7 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento removeArtist(Long eventId, Long artistId) {
-        Evento e = getById(eventId);
+        Evento e = eventoRepo.findById(eventId).get();
         if (e.getState() != EventoState.TENTATIVE) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -90,7 +92,7 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento confirm(Long id) {
-        Evento e = getById(id);
+        Evento e = eventoRepo.findById(id).get();
         if (e.getStartDate().isBefore(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha debe ser futura");
         }
@@ -100,7 +102,7 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento reschedule(Long id, LocalDate newDate) {
-        Evento e = getById(id);
+        Evento e = eventoRepo.findById(id).get();
         if (!(e.getState() == EventoState.CONFIRMED || e.getState() == EventoState.RESCHEDULED)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -114,7 +116,7 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento cancel(Long id) {
-        Evento e = getById(id);
+        Evento e = eventoRepo.findById(id).get();
         if (!(e.getState() == EventoState.CONFIRMED || e.getState() == EventoState.RESCHEDULED)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

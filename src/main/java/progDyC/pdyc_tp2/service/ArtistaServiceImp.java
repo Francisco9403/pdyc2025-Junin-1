@@ -39,18 +39,18 @@ public class ArtistaServiceImp implements ArtistaService {
 
     @Override
     public Artista update(Long id, Artista artista) {
-        Artista existing = getById(id);
+        Artista existing = repository.findById(id).get();
         if (!existing.isActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Artista desactivado no editable");
         }
         existing.setNombre(artista.getNombre());
-        existing.setGenre(artista.getGenre());
+        existing.setGenero(artista.getGenero());
         return repository.save(existing);
     }
 
     @Override
     public void deleteOrDeactivate(Long id) {
-        Artista existing = getById(id);
+        Artista existing = repository.findById(id).get();
         if (existing.getEvents().isEmpty()) {
             repository.delete(existing);
         } else {
