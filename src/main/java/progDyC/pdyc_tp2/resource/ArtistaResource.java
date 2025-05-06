@@ -27,7 +27,7 @@ public class ArtistaResource {
     }
 
     @PostMapping
-    public Artista create(@RequestBody Artista artista) {
+    public Artista create(@RequestBody Artista artista) {   //Spring ya arma sola la clase artist, solo necesitas mandar el nombre y genero
         return service.create(artista);
     }
 
