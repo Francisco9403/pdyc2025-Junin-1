@@ -12,6 +12,9 @@ public class Admin {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
+    private String password;
+
     public Long getId() {
         return id;
     }
@@ -22,4 +25,12 @@ public class Admin {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

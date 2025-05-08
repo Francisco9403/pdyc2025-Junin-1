@@ -38,4 +38,8 @@ public class AdminServiceImp implements AdminService {
         repository.delete(admin);
     }
 
+    public Admin findByUsername(String username){
+        return repository.findByUsername(username);
+    }
+
 }

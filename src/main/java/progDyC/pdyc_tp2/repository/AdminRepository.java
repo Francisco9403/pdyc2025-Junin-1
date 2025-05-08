@@ -7,5 +7,5 @@ import progDyC.pdyc_tp2.model.Admin;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin,Long> {
-
+    Admin findByUsername(String username);
 }

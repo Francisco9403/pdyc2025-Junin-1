@@ -10,5 +10,6 @@ public interface AdminService {
     void update(Long id,Admin admin);
     Admin getInstance(Long id);
     void delete(Long id);
+    Admin findByUsername(String username);
 
 }
