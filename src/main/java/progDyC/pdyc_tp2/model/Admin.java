@@ -8,9 +8,9 @@ public class Admin {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
-    private String nombre;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -20,10 +20,10 @@ public class Admin {
     }
 
     public String getNombre() {
-        return nombre;
+        return username;
     }
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.username = nombre;
     }
 
     public String getPassword() {

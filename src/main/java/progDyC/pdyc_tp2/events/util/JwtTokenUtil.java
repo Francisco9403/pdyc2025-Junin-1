@@ -6,8 +6,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.stereotype.Component;
 
-//VER SI PONER ESTO COMO @Component
+@Component
 public class JwtTokenUtil { 
 
     // Clave secreta para firmar el token, elijo una yo (debe mantenerse segura)
