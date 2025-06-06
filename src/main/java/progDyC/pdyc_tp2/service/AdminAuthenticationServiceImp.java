@@ -2,12 +2,12 @@ package progDyC.pdyc_tp2.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import progDyC.pdyc_tp2.events.util.JwtTokenUtil;
 import progDyC.pdyc_tp2.events.util.PasswordEncoderUtil;
 import progDyC.pdyc_tp2.model.Admin;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class AdminAuthenticationServiceImp implements AdminAuthenticathionService {
