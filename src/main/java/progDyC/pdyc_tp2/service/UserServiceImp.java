@@ -1,11 +1,13 @@
 package progDyC.pdyc_tp2.service;
 
 
+//import java.net.PasswordAuthentication;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import progDyC.pdyc_tp2.events.util.PasswordEncoderUtil;
 import progDyC.pdyc_tp2.model.User;
 import progDyC.pdyc_tp2.repository.UserRepository;
 @Service
@@ -13,13 +15,20 @@ public class UserServiceImp implements UserService{
     
     @Autowired
     private UserRepository repository;
+    private PasswordEncoderUtil passwordEncoder;
+
 
     @Override
     public List<User> getAll(){
         return repository.findAll();
     }
     @Override
-    public void create(User user){
+    public void create(User user) throws Exception{
+        User userDB = repository.findByUsername(user.getNombre());
+        if(userDB != null){
+            throw new Exception();
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
     }
     @Override
