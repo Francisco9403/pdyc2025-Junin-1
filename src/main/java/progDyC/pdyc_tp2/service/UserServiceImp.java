@@ -15,6 +15,7 @@ public class UserServiceImp implements UserService{
     
     @Autowired
     private UserRepository repository;
+    @Autowired
     private PasswordEncoderUtil passwordEncoder;
 
 
@@ -24,7 +25,7 @@ public class UserServiceImp implements UserService{
     }
     @Override
     public void create(User user) throws Exception{
-        User userDB = repository.findByUsername(user.getNombre());
+        User userDB = repository.findByNombre(user.getNombre());
         if(userDB != null){
             throw new Exception();
         }

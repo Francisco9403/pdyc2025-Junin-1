@@ -7,5 +7,5 @@ import progDyC.pdyc_tp2.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
-    public User findByUsername(String username); //public aqui es redundante, ya que todos lo metodos de las
+    public User findByNombre(String nombre); //public aqui es redundante, ya que todos lo metodos de las
 }                                                //interfaces son public, lo especifiquemos o no
