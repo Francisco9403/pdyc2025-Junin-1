@@ -23,13 +23,13 @@ public class AdminAuthenticationServiceImp implements AdminAuthenticathionServic
 
     @Override
     public String authenticate(Admin admin) throws Exception {
-        Admin existAdmin = adminService.findByUsername(admin.getNombre());
+        Admin existAdmin = adminService.findByUsername(admin.getNombre()); //Busco un admin de la BD por el nombre
         if (existAdmin == null) {
             throw new Exception("Admin no encontrado.");
         }
-        if (!passwordEncoder.verify(admin.getPassword(), existAdmin.getPassword())) {
+        if (!passwordEncoder.verify(admin.getPassword(), existAdmin.getPassword())) {//Verfico la contraseña recibida, con la de la BD
             throw new Exception("Contraseña incorrecta.");
         }
-        return jwtTokenUtil.generateToken(existAdmin.getNombre());
-    }
+        return jwtTokenUtil.generateToken(existAdmin.getNombre());//Si todo es valido, el usuario esta autenticado (existe en la BD y su contraseña es correcta)
+    }                                                             //Entonces se retorna un token que tendra como "subject" el "nombre" del admin autenticado  
 }

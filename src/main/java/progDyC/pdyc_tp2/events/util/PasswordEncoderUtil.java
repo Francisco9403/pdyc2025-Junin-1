@@ -1,7 +1,7 @@
 package progDyC.pdyc_tp2.events.util;
 
-import com.password4j.Password; // Esta importación es correcta
-import com.password4j.Hash;    // Esta importación es correcta
+import com.password4j.Password;
+import com.password4j.Hash;    
 import org.springframework.stereotype.Component;
 
 // YA NO NECESITAS ESTA IMPORTACIÓN: import com.password4j.BcryptFunction;

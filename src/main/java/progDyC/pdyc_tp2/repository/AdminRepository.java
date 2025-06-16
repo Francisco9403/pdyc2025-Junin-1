@@ -8,5 +8,5 @@ import progDyC.pdyc_tp2.model.Admin;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin,Long> {
-    Admin findByUsername(@Param("username") String username);
+    Admin findByUsername(@Param("username") String username); //Nota: se puede quitar @Param, solo es obligatorio cuando uso @Query
 }
