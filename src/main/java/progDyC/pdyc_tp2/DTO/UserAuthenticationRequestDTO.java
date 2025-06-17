@@ -1,6 +1,6 @@
 package progDyC.pdyc_tp2.DTO;
 
-public class CreateUserRequestDTO {
+public class UserAuthenticationRequestDTO {
  
     private String nombre;
     private String email;

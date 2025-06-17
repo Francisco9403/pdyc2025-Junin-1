@@ -1,10 +1,11 @@
 package progDyC.pdyc_tp2.resource;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import progDyC.pdyc_tp2.DTO.CreateUserRequestDTO;
+import progDyC.pdyc_tp2.DTO.UserAuthenticationRequestDTO;
 import progDyC.pdyc_tp2.model.Artista;
 import progDyC.pdyc_tp2.model.Evento;
 import progDyC.pdyc_tp2.model.User;
+import progDyC.pdyc_tp2.service.UserAuthenticationService;
 import progDyC.pdyc_tp2.service.UserService;
 
 @RestController
@@ -27,26 +29,42 @@ public class UserResource {
 
     @Autowired
     private UserService service;
+    @Autowired
+    private UserAuthenticationService userAuthenticationService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<User> getUsers(){
         return service.getAll();
     }
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CreateUserRequestDTO userDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        User user = modelMapper.map(userDTO, User.class);
+    public void registrarUsuario(@RequestBody UserAuthenticationRequestDTO userDTO) throws Exception{ //Crea un usuario (resgistra)
+        service.create(userDTO);            //Estos metodos hay que ver donde ubicarlos, porque si "/users" es restringido
+    }                                       //no se van a poder utilizar
+
+    @PostMapping(path = "/auth", produces = "application/json")
+    public ResponseEntity<?> authentication(@RequestBody UserAuthenticationRequestDTO userDTO) { //AUTENTICO a un usuario
         try {
-            service.create(user);
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
+            User user = modelMapper.map(userDTO, User.class);
+            String token = userAuthenticationService.authenticate(user);
+
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("token", token);
+
+            return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return ResponseEntity.status(401).build();
         }
     }
     /*@PostMapping
     public void create(@RequestBody User user){
         service.create(user);
     }*/
+    @PostMapping("/{id}")
+    public void autenticarUsuario(){
+
+    }
     
     @PutMapping("/{id}")
     public void update(@PathVariable Long id, @RequestBody User user){
