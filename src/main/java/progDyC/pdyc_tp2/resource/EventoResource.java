@@ -19,7 +19,7 @@ import progDyC.pdyc_tp2.service.EventoService;
 public class EventoResource {
 
     @Autowired
-    private EventoService service;
+    private EventoService eventoService;
     
     @Autowired
     private AdminAuthorizationService authorizationService;
@@ -29,7 +29,7 @@ public class EventoResource {
                                 @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.getAll(state));
+            return ResponseEntity.ok(eventoService.getAll(state));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -40,7 +40,7 @@ public class EventoResource {
                                      @RequestHeader("Authorizathion") String token) {
         try{
             authorizationService.authorize(token);
-            Evento evento = service.getById(id);
+            Evento evento = eventoService.getById(id);
             return ResponseEntity.ok(evento);
         } catch (Exception e) {
             return ResponseEntity.status(403).build(); // Acceso denegado
@@ -52,7 +52,7 @@ public class EventoResource {
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            Evento creado = service.create(evento);
+            Evento creado = eventoService.create(evento);
             return ResponseEntity.ok(creado);
         } catch (Exception e) {
             return ResponseEntity.status(403).build(); // Acceso denegado
@@ -65,7 +65,7 @@ public class EventoResource {
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.update(id, evento));
+            return ResponseEntity.ok(eventoService.update(id, evento));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -76,7 +76,7 @@ public class EventoResource {
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            service.delete(id);
+            eventoService.delete(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
@@ -89,7 +89,7 @@ public class EventoResource {
                                        @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.addArtist(id, body.get("artistId")));
+            return ResponseEntity.ok(eventoService.addArtist(id, body.get("artistId")));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -101,7 +101,7 @@ public class EventoResource {
                                           @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.removeArtist(id, artistId));
+            return ResponseEntity.ok(eventoService.removeArtist(id, artistId));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -112,7 +112,7 @@ public class EventoResource {
                                      @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.confirm(id));
+            return ResponseEntity.ok(eventoService.confirm(id));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -124,7 +124,7 @@ public class EventoResource {
                                         @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.reschedule(id, startDate));
+            return ResponseEntity.ok(eventoService.reschedule(id, startDate));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -135,7 +135,7 @@ public class EventoResource {
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.cancel(id));
+            return ResponseEntity.ok(eventoService.cancel(id));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }

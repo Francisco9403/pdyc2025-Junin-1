@@ -28,7 +28,7 @@ import progDyC.pdyc_tp2.service.AdminService;
 public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUDES http Y SE RETORNAN LOS HTML
                                     //  LUEGO SE LE SOLICITA AL service QUE HACER
     @Autowired
-    private AdminService service;
+    private AdminService adminService;
 
     @Autowired
     private AdminAuthenticationServiceImp authenticationService;
@@ -43,7 +43,7 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
     public ResponseEntity<?> getAdmins(@RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.getAll());
+            return ResponseEntity.ok(adminService.getAll());
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -54,7 +54,7 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            service.create(admin);
+            adminService.create(admin);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
@@ -67,7 +67,7 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            service.update(id, admin);
+            adminService.update(id, admin);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
@@ -79,7 +79,7 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
                                          @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            return ResponseEntity.ok(service.getInstance(id));
+            return ResponseEntity.ok(adminService.getInstance(id));
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
         }
@@ -90,7 +90,7 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
-            service.delete(id);
+            adminService.delete(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(403).build();
@@ -98,11 +98,11 @@ public class AdminResource {        //RECORDAR QUE AQUI SE MANEJAN LAS SOLICITUD
     }
 
 
-    @PostMapping(path = "/auth", produces = "application/json")
-    public ResponseEntity<?> authentication(@RequestBody AdminAuthenticationRequestDTO dto) {
-        try {
-            Admin admin = modelMapper.map(dto, Admin.class);
-            String token = authenticationService.authenticate(admin);
+    @PostMapping(path = "/auth", produces = "application/json")     //Redirigir aqui cunado no pueda entrar a un endpoint privado
+    public ResponseEntity<?> authentication(@RequestBody AdminAuthenticationRequestDTO dto) { //Se reciben el nombre y la contraseña del admin
+        try {                                                                         //Al que se quiere autenticar, se validaran en la BD y de ser
+            Admin admin = modelMapper.map(dto, Admin.class);          //Correctos se devolvera un token, el caul valida que ya esta autenticado
+            String token = authenticationService.authenticate(admin);                 //Para poder usar los endpoints privados
 
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("token", token);
