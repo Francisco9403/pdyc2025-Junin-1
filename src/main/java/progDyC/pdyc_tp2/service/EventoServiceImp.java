@@ -13,6 +13,8 @@ import progDyC.pdyc_tp2.model.Evento;
 import progDyC.pdyc_tp2.model.EventoState;
 import progDyC.pdyc_tp2.repository.ArtistaRepository;
 import progDyC.pdyc_tp2.repository.EventoRepository;
+import org.springframework.context.ApplicationEventPublisher;
+import progDyC.pdyc_tp2.events.util.EventoStateChangedEvent;
 
 @Service
 public class EventoServiceImp implements EventoService {
@@ -22,6 +24,9 @@ public class EventoServiceImp implements EventoService {
 
     @Autowired
     private ArtistaRepository artistaRepo;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Override
     public List<Evento> getAll(EventoState state) {
@@ -92,18 +97,22 @@ public class EventoServiceImp implements EventoService {
 
     @Override
     public Evento confirm(Long id) {
-        Evento e = getById(id);
+        Evento e       = getById(id);
+        EventoState os = e.getState();
         if (e.getStartDate().isBefore(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha debe ser futura");
         }
         e.setState(EventoState.CONFIRMED);
-        return eventoRepo.save(e);
+        Evento saved = eventoRepo.save(e);
+        publisher.publishEvent(new EventoStateChangedEvent(this, saved, os, EventoState.CONFIRMED));
+        return saved;
     }
 
     @Override
     public Evento reschedule(Long id, LocalDate newDate) {
-        Evento e = getById(id);
-        if (!(e.getState() == EventoState.CONFIRMED || e.getState() == EventoState.RESCHEDULED)) {
+        Evento e        = getById(id);
+        EventoState os  = e.getState();
+        if (!(os == EventoState.CONFIRMED || os == EventoState.RESCHEDULED)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         if (newDate.isBefore(LocalDate.now())) {
@@ -111,16 +120,21 @@ public class EventoServiceImp implements EventoService {
         }
         e.setStartDate(newDate);
         e.setState(EventoState.RESCHEDULED);
-        return eventoRepo.save(e);
+        Evento saved = eventoRepo.save(e);
+        publisher.publishEvent(new EventoStateChangedEvent(this, saved, os, EventoState.RESCHEDULED));
+        return saved;
     }
 
     @Override
     public Evento cancel(Long id) {
-        Evento e = getById(id);
-        if (!(e.getState() == EventoState.CONFIRMED || e.getState() == EventoState.RESCHEDULED)) {
+        Evento e        = getById(id);
+        EventoState os  = e.getState();
+        if (!(os == EventoState.CONFIRMED || os == EventoState.RESCHEDULED)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         e.setState(EventoState.CANCELLED);
-        return eventoRepo.save(e);
+        Evento saved = eventoRepo.save(e);
+        publisher.publishEvent(new EventoStateChangedEvent(this, saved, os, EventoState.CANCELLED));
+        return saved;
     }
 }

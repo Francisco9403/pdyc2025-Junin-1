@@ -31,7 +31,7 @@ public class User {
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "artistas_id")
     )
-    private Set<Artista> ArtistasSeguidos = new HashSet<>();
+    private Set<Artista> artistasSeguidos = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -39,7 +39,7 @@ public class User {
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "artistas_id")
     )
-    private Set<Evento> EventosFavoritos = new HashSet<>();
+    private Set<Evento> eventosFavoritos = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -72,19 +72,20 @@ public class User {
         this.id = id;
     }
 
+
     public Set<Artista> getArtistasSeguidos() {
-        return ArtistasSeguidos;
+        return artistasSeguidos;
     }
 
     public void setArtistasSeguidos(Set<Artista> artistasSeguidos) {
-        ArtistasSeguidos = artistasSeguidos;
+        this.artistasSeguidos = artistasSeguidos;
     }
 
     public Set<Evento> getEventosFavoritos() {
-        return EventosFavoritos;
+        return eventosFavoritos;
     }
 
     public void setEventosFavoritos(Set<Evento> eventosFavoritos) {
-        EventosFavoritos = eventosFavoritos;
+        this.eventosFavoritos = eventosFavoritos;
     }
 }
