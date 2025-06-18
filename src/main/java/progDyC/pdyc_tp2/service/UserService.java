@@ -21,6 +21,6 @@ public interface UserService {
     public void seguirEvento(Long userId, Long eventoId);
     public void dejarSeguirEvento(Long userId, Long eventoId);
     public List<Evento> listaEventoVigente(Long userId);
-    public List<Evento> listaEventoProximos(Long userId);
+    public List<Evento> listaEventoProximosDeMisArtistas(Long userId);
 
 }
