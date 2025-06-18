@@ -1,11 +1,13 @@
 package progDyC.pdyc_tp2.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import progDyC.pdyc_tp2.events.util.PasswordEncoderUtil;
 import progDyC.pdyc_tp2.model.User;
 import progDyC.pdyc_tp2.events.util.JwtTokenUtil;
 
+@Service
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 
     @Autowired
