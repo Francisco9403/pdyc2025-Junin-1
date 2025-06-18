@@ -1,7 +1,5 @@
 package progDyC.pdyc_tp2.resource;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import progDyC.pdyc_tp2.model.Evento;
 import progDyC.pdyc_tp2.model.User;
 import progDyC.pdyc_tp2.service.UserAuthorizationService;
 import progDyC.pdyc_tp2.service.UserService;
