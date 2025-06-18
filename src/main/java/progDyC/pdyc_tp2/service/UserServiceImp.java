@@ -101,7 +101,7 @@ public class UserServiceImp implements UserService{
     @Override
     public void seguirEvento(Long userId, Long eventoId) {
         User userbd = userRepository.findById(userId).orElseThrow();
-        Evento eventobd = eventoRepository.findById(eventoId).filter(e -> !e.getState().equals(EventoState.TENTATIVE)) //flitro para asgurar que el evento sea tentativo
+        Evento eventobd = eventoRepository.findById(eventoId).filter(e -> !e.getState().equals(EventoState.TENTATIVE)) //flitro para asgurar que el evento NO sea tentativo
                 .orElseThrow();
         userbd.getEventosFavoritos().add(eventobd);
         userRepository.save(userbd);
@@ -117,19 +117,21 @@ public class UserServiceImp implements UserService{
 
     @Override
     public List<Evento> listaEventoVigente(Long userId) {
-        return userRepository.findById(userId)  //Falta filtrar por los que esten vigentes (ver a que se refiere con vigente)
+        LocalDate now = LocalDate.now();
+        return userRepository.findById(userId)  //Se entiende por vigente que NO esten cancelados y que todavia no hallan sucedido
                 .orElseThrow()
-                .getEventosFavoritos()
-                .stream().collect(Collectors.toList());
+                .getEventosFavoritos().stream()
+                .filter(e -> e.getStartDate().isAfter(now) && !(e.getState().equals(EventoState.CANCELLED)))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Evento> listaEventoProximos(Long userId) {
+    public List<Evento> listaEventoProximosDeMisArtistas(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         LocalDate now = LocalDate.now();
-        return user.getArtistasSeguidos().stream()
-                .flatMap(artist -> artist.getEvents().stream())  ///te trae los eventos de un artista y verifica que esten en tentativos y los muestra
-                .filter(e -> e.getStartDate().isAfter(now) && !e.getState().equals(EventoState.TENTATIVE))
+        return user.getArtistasSeguidos().stream()      //Obtengo los artistas a los que el usuario sigue
+                .flatMap(artist -> artist.getEvents().stream())  ///te trae los eventos en que participa un artista y verifica que NO esten ni tentativos o cancelados, que no hallan sucedido y los muestra
+                .filter(e -> e.getStartDate().isAfter(now) && !(e.getState().equals(EventoState.TENTATIVE) || e.getState().equals(EventoState.CANCELLED)))
                 .sorted((e1, e2) -> e1.getStartDate().compareTo(e2.getStartDate())) //ver si cumple el mostrar las fechas mas proximas
                 .collect(Collectors.toList());
     }
