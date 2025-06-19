@@ -111,7 +111,7 @@ public class UserServiceImp implements UserService{
     public void dejarSeguirEvento(Long userId, Long eventoId) {
         User userbd = userRepository.findById(userId).orElseThrow(); //Habria que verificar primero si el evento obtenido de la BD
         Evento eventobd = eventoRepository.findById(eventoId).orElseThrow();//Pertenece a la lista de eventos favoritos del usuario
-        userbd.getEventosFavoritos().remove(eventobd);
+        userbd.getEventosFavoritos().remove(eventobd);//Si el evento no esta en favoritos el remove no hace nada
         userRepository.save(userbd);
     }
 
@@ -121,7 +121,7 @@ public class UserServiceImp implements UserService{
         return userRepository.findById(userId)  //Se entiende por vigente que NO esten cancelados y que todavia no hallan sucedido
                 .orElseThrow()
                 .getEventosFavoritos().stream()
-                .filter(e -> e.getStartDate().isAfter(now) && !(e.getState().equals(EventoState.CANCELLED)))
+                .filter(e -> e.getStartDate().isAfter(now) && !((e.getState().equals(EventoState.CANCELLED)) || e.getState().equals(EventoState.TENTATIVE)))//Agregar que no este tentativo
                 .collect(Collectors.toList());
     }
 

@@ -57,7 +57,7 @@ public class UserResource {    //VER: Creo que en este resource al ser "restring
     
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody User user,
+                                    @RequestBody User user, //DEBE RECIBIR UN DTO
                                     @RequestHeader("Authorization") String token) {
         try {
             authorizationService.authorize(token);
