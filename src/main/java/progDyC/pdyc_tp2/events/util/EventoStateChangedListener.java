@@ -1,4 +1,5 @@
 package progDyC.pdyc_tp2.events.util;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,11 +32,20 @@ public class EventoStateChangedListener
         Evento e = evt.getEvento();
         Set<Artista> artistas = e.getArtists();
 
-        // Encuentra usuarios que siguen al menos uno de esos artistas
+        // 1) Usuarios que siguen a algún artista del evento
         List<User> seguidores = userRepo
                 .findDistinctByArtistasSeguidosIn(artistas);
 
-        // Construye el mensaje
+        // 2) Usuarios que tienen el evento en favoritos
+        List<User> fanaticos = userRepo
+                .findDistinctByEventosFavoritosContaining(e);
+
+        // 3) Unimos ambos listados sin duplicados
+        Set<User> destinatarios = new HashSet<>();
+        destinatarios.addAll(seguidores);
+        destinatarios.addAll(fanaticos);
+
+        // 4) Construimos el mensaje
         String mensaje = String.format(
                 "El evento «%s» cambió de %s a %s.",
                 e.getNombre(),
@@ -43,9 +53,10 @@ public class EventoStateChangedListener
                 evt.getNewState()
         );
 
-        // Envía la notificación
-        seguidores.forEach(u ->
+        // 5) Enviamos notificación a todos
+        destinatarios.forEach(u ->
                 notificationService.sendNotification(u, mensaje)
         );
     }
+
 }
