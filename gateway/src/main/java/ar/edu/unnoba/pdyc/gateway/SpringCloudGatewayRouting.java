@@ -12,13 +12,31 @@ public class SpringCloudGatewayRouting {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(r -> r.path("/api/songs/**")
+                .route(r -> r.path("/api/admin/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("lb://song-service"))
+                        .uri("lb://artist-service"))
+                .route(r -> r.path("/api/public/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://artist-service"))                        
                 
-                .route(r -> r.path("/api/playlists/**")
+
+
+                .route(r -> r.path("/api/admins/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("lb://playlist-service"))
+                        .uri("lb://auth-admin-user-service"))
+                .route(r -> r.path("/api/users/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://auth-admin-user-service"))
+                .route(r -> r.path("/api/public/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://auth-admin-user-service"))
+
+
+
+                .route(r -> r.path("/api/admin/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://event-service"))
+        
                 .build();
     }
 }

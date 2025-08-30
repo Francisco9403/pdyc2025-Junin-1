@@ -20,7 +20,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     @Override
     public String authenticate(User user) throws Exception{
         User userBD = userService.findByNombre(user.getNombre());//Busco un usuario de la BD por el nombre
-        if (userBD == null){
+        if (userBD == null){                //Recomendable buscar por id
             throw new Exception("El usuario: "+user.getNombre()+" no se encuentra registrado");
         }
         if (!passwordEncoder.verify(user.getPassword(), userBD.getPassword())){//Verfico la contraseña recibida, con la de la BD
